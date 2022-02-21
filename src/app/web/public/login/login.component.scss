@@ -1,0 +1,30 @@
+.login-body {
+  margin: 2rem;
+  padding: 7rem 3rem;
+  border-radius: 1rem;
+}
+
+.otp {
+  width: 45px;
+}
+
+.otp:not(:first-child) {
+  margin-left: 0.75rem;
+}
+
+.resend-otp {
+  line-height: 0;
+}
+
+// 880px is exactly between 768px and 992px
+@media (max-width: 880px) {
+  .login-body {
+    padding: 5rem 2rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .login-body {
+    padding: 3rem 0.5rem;
+  }
+}

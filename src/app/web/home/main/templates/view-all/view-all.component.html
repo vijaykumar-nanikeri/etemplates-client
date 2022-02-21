@@ -1,0 +1,232 @@
+<div class="row mb-3">
+  <div class="col-12 col-md-8 col-lg-6">
+    <div class="row">
+      <div class="col-12 col-md-5 mb-3 mb-md-0">
+        <select
+          class="form-select"
+          [(ngModel)]="categoryModel"
+          (ngModelChange)="onCategoryModelChange($event)"
+        >
+          <option [value]="0">{{ labels.CategoryPlaceholder }}</option>
+          <option [value]="category.id" *ngFor="let category of categories">
+            {{ category.name }}
+          </option>
+        </select>
+      </div>
+      <div class="col-12 col-md-5 mb-3 mb-md-0">
+        <select
+          class="form-select"
+          [(ngModel)]="subcategoryModel"
+          (ngModelChange)="onSubcategoryModelChange($event)"
+        >
+          <option [value]="0">{{ labels.SubcategoryPlaceholder }}</option>
+          <option
+            [value]="subcategory.id"
+            *ngFor="let subcategory of subcategories"
+          >
+            {{ subcategory.name }}
+          </option>
+        </select>
+      </div>
+      <div class="col-12 col-md-2 mb-3 mb-md-0 d-grid">
+        <button
+          type="button"
+          class="btn btn-primary btn-sm text-uppercase"
+          (click)="getTemplates()"
+          [disabled]="!(categoryModel && subcategoryModel)"
+        >
+          {{ labels.Get }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-container *ngIf="subcategoryModel && isGetClicked">
+  <div class="row">
+    <div class="col-12">
+      <hr />
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-12 col-md-8 col-lg-6 mb-3 mb-md-0">
+      <input
+        class="form-control input-search ps-5 bg-transparent border-0 border-bottom"
+        type="text"
+        [placeholder]="labels.SearchPlaceholder"
+        [(ngModel)]="searchModel"
+        (ngModelChange)="onSearchModelChange($event)"
+      />
+    </div>
+    <div class="col-12 col-md-4 col-lg-6 d-flex justify-content-end">
+      <button
+        type="button"
+        class="btn lh-1 p-0"
+        (click)="openAddTemplateModal(addTemplateModalTemplate)"
+      >
+        <i class="bi bi-plus-circle fs-3 text-muted"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="table-responsive">
+        <table class="table align-baseline">
+          <thead class="table-primary">
+            <tr>
+              <th
+                *ngFor="let templatesTh of templatesThead; let i = index"
+                [ngClass]="{
+                  'text-end': [0].includes(i),
+                  'text-center': [
+                    templatesThead.length - 1,
+                    templatesThead.length - 2
+                  ].includes(i)
+                }"
+              >
+                {{ templatesTh.name }}
+              </th>
+            </tr>
+          </thead>
+          <tbody *ngIf="!templates.length">
+            <tr>
+              <td
+                class="text-center fw-bold"
+                [attr.colspan]="templatesThead.length"
+              >
+                {{ homeLabels.NoRecordsFound }}
+              </td>
+            </tr>
+          </tbody>
+          <tbody *ngIf="templates.length > 0">
+            <tr *ngFor="let template of templates; let i = index">
+              <th scope="row" class="text-end">{{ i + 1 }}</th>
+              <td>{{ template.name }}</td>
+              <td>{{ template.createdBy }}</td>
+              <td>{{ template.createdOn | formatDate: "DMY" }}</td>
+              <td class="text-center">
+                <button
+                  type="button"
+                  class="btn btn-link p-0"
+                  (click)="
+                    openEditTemplateModal(editTemplateModalTemplate, template)
+                  "
+                >
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-link p-0 ms-2"
+                  (click)="openDeleteTemplateModal(template)"
+                >
+                  <i class="bi bi-trash text-danger"></i>
+                </button>
+              </td>
+              <td class="text-center">
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm"
+                  (click)="composeTemplate(template)"
+                >
+                  {{ labels.Compose }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #addTemplateModalTemplate>
+  <div class="modal-header px-5 pt-5 border-bottom-0">
+    <div class="modal-title fs-6">{{ addTemplateModalLabels.Title }}</div>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="closeAddTemplateModal()"
+    ></button>
+  </div>
+  <div class="modal-body px-5">
+    <ng-container [formGroup]="addTemplateForm">
+      <div class="mb-3">
+        <label for="templateName" class="form-label fw-bold">
+          {{ addTemplateModalLabels.TemplateName }}
+          <span class="text-danger">*</span>
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="templateName"
+          [placeholder]="addTemplateModalLabels.TemplateNamePlaceholder"
+          formControlName="templateName"
+        />
+      </div>
+    </ng-container>
+  </div>
+  <div class="modal-footer px-5 pb-5 border-top-0">
+    <button
+      type="button"
+      class="btn btn-link btn-sm text-reset text-uppercase text-decoration-none"
+      (click)="cancelAddTemplateModal()"
+    >
+      {{ addTemplateModalLabels.Cancel }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary btn-sm text-uppercase"
+      (click)="addTemplate()"
+      [disabled]="!addTemplateForm.valid"
+    >
+      {{ addTemplateModalLabels.Add }}
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #editTemplateModalTemplate>
+  <div class="modal-header px-5 pt-5 border-bottom-0">
+    <div class="modal-title fs-6">{{ editTemplateModalLabels.Title }}</div>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="closeEditTemplateModal()"
+    ></button>
+  </div>
+  <div class="modal-body px-5">
+    <ng-container [formGroup]="editTemplateForm">
+      <div class="mb-3">
+        <label for="templateName" class="form-label fw-bold">
+          {{ editTemplateModalLabels.TemplateName }}
+          <span class="text-danger">*</span>
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="templateName"
+          [placeholder]="editTemplateModalLabels.TemplateNamePlaceholder"
+          formControlName="templateName"
+        />
+      </div>
+    </ng-container>
+  </div>
+  <div class="modal-footer px-5 pb-5 border-top-0">
+    <button
+      type="button"
+      class="btn btn-link btn-sm text-reset text-uppercase text-decoration-none"
+      (click)="cancelEditTemplateModal()"
+    >
+      {{ editTemplateModalLabels.Cancel }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary btn-sm text-uppercase"
+      (click)="editTemplate()"
+      [disabled]="!editTemplateForm.valid"
+    >
+      {{ editTemplateModalLabels.Update }}
+    </button>
+  </div>
+</ng-template>

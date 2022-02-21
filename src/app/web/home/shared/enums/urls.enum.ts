@@ -1,0 +1,17 @@
+export enum URLS {
+  Logout = 'logout',
+  Menus = 'login/menus',
+  UserMenus = 'login/userMenus',
+  Categories = 'categories',
+  SearchCategories = 'categories/search',
+  Subcategories = 'subcategories',
+  SearchSubcategories = 'subcategories/search',
+  Templates = 'templates',
+  SearchTemplates = 'templates/search',
+  ComposeTemplate = 'templates/composeTemplate',
+  UserTemplates = 'templates/userTemplates',
+  SearchUserTemplates = 'templates/userTemplates/search',
+  Users = 'users',
+  SearchUsers = 'users/search',
+  UserCategories = 'users/userCategories',
+}

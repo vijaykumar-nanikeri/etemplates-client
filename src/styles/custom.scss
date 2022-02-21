@@ -1,0 +1,60 @@
+body {
+  font-family: optima;
+}
+
+thead {
+  border-top: 2px solid #000 !important;
+}
+
+.app-title-font-family {
+  font-family: Chicle;
+}
+
+.input-search {
+  background-image: url("./../assets/images/search.svg");
+  background-position: 10px center;
+  background-size: 20px;
+  background-repeat: no-repeat;
+}
+
+.page-title {
+  pointer-events: none;
+}
+
+.page-title::before {
+  display: inline-block;
+  content: "";
+  vertical-align: -0.125em;
+  background-image: url("./../assets/images/navigate-back.svg");
+  background-repeat: no-repeat;
+  background-size: 1.25rem 1.25rem;
+  width: 1.5rem;
+  height: 1.25rem;
+  margin-left: -1.5rem;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.p-1-inch {
+  padding: 1in;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.bg {
+  &-primary {
+    background-color: #27408b !important;
+  }
+}
+
+.text {
+  &-primary {
+    color: #27408b !important;
+  }
+}
+
+.a4 {
+  width: 210mm;
+}

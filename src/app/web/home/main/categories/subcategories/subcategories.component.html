@@ -1,0 +1,267 @@
+<div class="row mb-4">
+  <div class="col">
+    <h5
+      class="page-title mb-0 ps-4"
+      [routerLink]="['/home/categories/view-all']"
+    >
+      {{ categoryName }}
+    </h5>
+  </div>
+</div>
+<div class="row mb-3">
+  <div class="ccol-12 col-md-8 col-lg-6 mb-3 mb-md-0">
+    <input
+      class="form-control input-search ps-5 bg-transparent border-0 border-bottom"
+      type="text"
+      [placeholder]="labels.SearchPlaceholder"
+      [(ngModel)]="searchModel"
+      (ngModelChange)="onSearchModelChange($event)"
+    />
+  </div>
+  <div class="col-12 col-md-4 col-lg-6 d-flex justify-content-end">
+    <button
+      type="button"
+      class="btn lh-1 p-0"
+      (click)="openAddSubcategoryModal(addSubcategoryModalTemplate)"
+    >
+      <i class="bi bi-plus-circle fs-3 text-muted"></i>
+    </button>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="table-responsive">
+      <table class="table">
+        <thead class="table-primary">
+          <tr>
+            <th
+              *ngFor="let subcategoriesTh of subcategoriesThead; let i = index"
+              [ngClass]="{
+                'text-end': [0].includes(i),
+                'text-center': [2, subcategoriesThead.length - 1].includes(i)
+              }"
+            >
+              {{ subcategoriesTh.name }}
+            </th>
+          </tr>
+        </thead>
+        <tbody *ngIf="!subcategories.length">
+          <tr>
+            <td
+              class="text-center fw-bold"
+              [attr.colspan]="subcategoriesThead.length"
+            >
+              {{ homeLabels.NoRecordsFound }}
+            </td>
+          </tr>
+        </tbody>
+        <tbody *ngIf="subcategories.length > 0">
+          <tr *ngFor="let subcategory of subcategories; let i = index">
+            <th scope="row" class="text-end">{{ i + 1 }}</th>
+            <td>{{ subcategory.name }}</td>
+            <td class="text-center">
+              <ng-container *ngIf="!subcategory.templates">
+                {{ subcategory.templates }}
+              </ng-container>
+              <button
+                type="button"
+                class="btn btn-link p-0 fw-bold"
+                *ngIf="subcategory.templates"
+                (click)="
+                  openTemplatesModal(templatesModalTemplate, subcategory)
+                "
+              >
+                {{ subcategory.templates }}
+              </button>
+            </td>
+            <td>{{ subcategory.createdBy }}</td>
+            <td>{{ subcategory.createdOn | formatDate: "DMY" }}</td>
+            <td class="text-center">
+              <button
+                type="button"
+                class="btn btn-link p-0"
+                (click)="
+                  openEditSubcategoryModal(
+                    editSubcategoryModalTemplate,
+                    subcategory
+                  )
+                "
+              >
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button
+                type="button"
+                class="btn btn-link p-0 ms-2"
+                (click)="openDeleteSubcategoryModal(subcategory)"
+              >
+                <i class="bi bi-trash text-danger"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<ng-template #addSubcategoryModalTemplate>
+  <div class="modal-header px-5 pt-5 border-bottom-0">
+    <div class="modal-title fs-6">{{ addSubcategoryModalLabels.Title }}</div>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="closeAddSubcategoryModal()"
+    ></button>
+  </div>
+  <div class="modal-body px-5">
+    <ng-container [formGroup]="addSubcategoryForm">
+      <div class="mb-3">
+        <label for="subcategoryName" class="form-label fw-bold">
+          {{ addSubcategoryModalLabels.SubcategoryName }}
+          <span class="text-danger">*</span>
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="subcategoryName"
+          [placeholder]="addSubcategoryModalLabels.SubcategoryNamePlaceholder"
+          formControlName="subcategoryName"
+        />
+      </div>
+    </ng-container>
+  </div>
+  <div class="modal-footer px-5 pb-5 border-top-0">
+    <button
+      type="button"
+      class="btn btn-link btn-sm text-reset text-uppercase text-decoration-none"
+      (click)="cancelAddSubcategoryModal()"
+    >
+      {{ addSubcategoryModalLabels.Cancel }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary btn-sm text-uppercase"
+      (click)="addSubcategory()"
+      [disabled]="!addSubcategoryForm.valid"
+    >
+      {{ addSubcategoryModalLabels.Add }}
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #editSubcategoryModalTemplate>
+  <div class="modal-header px-5 pt-5 border-bottom-0">
+    <div class="modal-title fs-6">{{ editSubcategoryModalLabels.Title }}</div>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="closeEditSubcategoryModal()"
+    ></button>
+  </div>
+  <div class="modal-body px-5">
+    <ng-container [formGroup]="editSubcategoryForm">
+      <div class="mb-3">
+        <label for="subcategoryName" class="form-label fw-bold">
+          {{ editSubcategoryModalLabels.SubcategoryName }}
+          <span class="text-danger">*</span>
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="subcategoryName"
+          [placeholder]="editSubcategoryModalLabels.SubcategoryNamePlaceholder"
+          formControlName="subcategoryName"
+        />
+      </div>
+    </ng-container>
+  </div>
+  <div class="modal-footer px-5 pb-5 border-top-0">
+    <button
+      type="button"
+      class="btn btn-link btn-sm text-reset text-uppercase text-decoration-none"
+      (click)="cancelEditSubcategoryModal()"
+    >
+      {{ editSubcategoryModalLabels.Cancel }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary btn-sm text-uppercase"
+      (click)="editSubcategory()"
+      [disabled]="!editSubcategoryForm.valid"
+    >
+      {{ editSubcategoryModalLabels.Update }}
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #templatesModalTemplate>
+  <div class="modal-header px-5 pt-5 border-bottom-0">
+    <div class="modal-title fs-6">
+      {{ subcategoryName || templatesModalLabels.Title }}
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="closeTemplatesModal()"
+    ></button>
+  </div>
+  <div class="modal-body px-5">
+    <div class="row mb-3">
+      <div class="col-12 col-md-8 mb-3 mb-md-0">
+        <input
+          class="form-control input-search ps-5 bg-transparent border-0 border-bottom"
+          type="text"
+          [placeholder]="templatesModalLabels.SearchPlaceholder"
+          [(ngModel)]="templateSearchModel"
+          (ngModelChange)="onTemplateSearchModelChange($event)"
+        />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="table-responsive">
+          <table class="table">
+            <thead class="table-primary">
+              <tr>
+                <th
+                  *ngFor="let templatesTh of templatesThead; let i = index"
+                  [ngClass]="{ 'text-end': [0].includes(i) }"
+                >
+                  {{ templatesTh.name }}
+                </th>
+              </tr>
+            </thead>
+            <tbody *ngIf="!templates.length">
+              <tr>
+                <td
+                  class="text-center fw-bold"
+                  [attr.colspan]="templatesThead.length"
+                >
+                  {{ homeLabels.NoRecordsFound }}
+                </td>
+              </tr>
+            </tbody>
+            <tbody *ngIf="templates.length > 0">
+              <tr *ngFor="let template of templates; let i = index">
+                <th scope="row" class="text-end">{{ i + 1 }}</th>
+                <td>{{ template.name }}</td>
+                <td>{{ template.createdBy }}</td>
+                <td>{{ template.createdOn | formatDate: "DMY" }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer px-5 pb-5 border-top-0">
+    <button
+      type="button"
+      class="btn btn-link btn-sm text-reset text-uppercase text-decoration-none"
+      (click)="closeTemplatesModal()"
+    >
+      {{ templatesModalLabels.Close }}
+    </button>
+  </div>
+</ng-template>

@@ -1,0 +1,71 @@
+<div class="card login-body">
+  <div class="card-body">
+    <form [formGroup]="loginForm" (ngSubmit)="loginFormSubmit(loginForm)">
+      <div class="mb-5">
+        <h5>{{ labels.Login }}</h5>
+      </div>
+      <div class="mb-3">
+        <label for="mobileNo" class="form-label fw-bold">
+          {{ labels.MobileNo }}
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          [ngClass]="{
+            'is-invalid': isLoginFormSubmitted && mobileNo?.invalid
+          }"
+          id="mobileNo"
+          [placeholder]="labels.MobileNoPlaceholder"
+          formControlName="mobileNo"
+        />
+        <div
+          class="invalid-feedback"
+          *ngIf="isLoginFormSubmitted && mobileNo?.invalid"
+        >
+          <div *ngIf="(mobileNo?.errors)!['required']">
+            {{ mobileNoFormControlLabels.RequiredValidationFeedback }}
+          </div>
+          <div *ngIf="(mobileNo?.errors)!['pattern']">
+            {{ mobileNoFormControlLabels.PatternValidationFeedback }}
+          </div>
+          <div
+            *ngIf="
+              (mobileNo?.errors)!['minlength'] ||
+              (mobileNo?.errors)!['maxlength']
+            "
+          >
+            {{ mobileNoFormControlLabels.LengthValidationFeedback }}
+          </div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label fw-bold">
+          {{ labels.Password }}
+        </label>
+        <input
+          type="password"
+          class="form-control"
+          [ngClass]="{
+            'is-invalid': isLoginFormSubmitted && password?.invalid
+          }"
+          id="password"
+          [placeholder]="labels.PasswordPlaceholder"
+          formControlName="password"
+        />
+        <div
+          class="invalid-feedback"
+          *ngIf="isLoginFormSubmitted && password?.invalid"
+        >
+          <div *ngIf="(password?.errors)!['required']">
+            {{ passwordFormControlLabels.RequiredValidationFeedback }}
+          </div>
+        </div>
+      </div>
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary">
+          {{ labels.Login }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,137 @@
+<div class="row mb-4">
+  <div class="col">
+    <h5
+      class="page-title mb-0 ps-4"
+      [routerLink]="['/home/templates/view-all']"
+    >
+      {{ labels.Compose }}
+      <span class="fw-bold" *ngIf="templateName">{{ templateName }}</span>
+    </h5>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <form [formGroup]="addFieldForm" (submit)="addFieldFormSubmit()">
+      <div class="row">
+        <div class="col-12 col-sm-8 col-md-5 col-lg-4 col-xl-3 mb-3">
+          <label for="field" class="form-label fw-bold">{{
+            labels.Field
+          }}</label>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            id="field"
+            [placeholder]="labels.FieldPlaceholder"
+            formControlName="name"
+          />
+        </div>
+        <div
+          class="col-12 col-sm-4 col-md-3 col-xl-2 d-grid d-sm-flex align-items-sm-end mb-3"
+        >
+          <button
+            type="submit"
+            class="btn btn-primary btn-sm"
+            [disabled]="!addFieldForm.valid"
+          >
+            {{ labels.Add }}
+          </button>
+        </div>
+      </div>
+    </form>
+    <form [formGroup]="fieldsForm">
+      <div class="row" *ngIf="fields.controls.length > 0">
+        <div class="col-12 col-sm-12 d-flex flex-wrap">
+          <ng-container formArrayName="fields">
+            <ng-container
+              *ngFor="let fieldForm of fields.controls; let i = index"
+            >
+              <ng-container [formGroupName]="i">
+                <h5
+                  class="d-inline-block m-2 mt-0 ms-0"
+                  *ngIf="!fieldForm.value.isEdit"
+                >
+                  <span
+                    class="badge bg-secondary d-flex align-items-center h-100 fw-normal"
+                  >
+                    <div>{{ fieldForm.value.name }}</div>
+                    <div class="ms-2">
+                      <i
+                        class="bi bi-pencil cursor-pointer"
+                        (click)="manageField('edit', fieldForm)"
+                      ></i>
+                    </div>
+                    <div class="ms-2">
+                      <i
+                        class="bi bi-trash cursor-pointer"
+                        (click)="manageField('remove', fieldForm, i)"
+                      ></i>
+                    </div>
+                  </span>
+                </h5>
+                <h5
+                  class="d-inline-block mt-0 me-3 mb-2 ms-0"
+                  *ngIf="fieldForm.value.isEdit"
+                >
+                  <span
+                    class="badge bg-light text-dark d-flex align-items-center p-0 fw-normal"
+                  >
+                    <div>
+                      <input
+                        class="form-control form-control-sm"
+                        type="text"
+                        placeholder="Field Name"
+                        style="min-height: fit-content; font-size: x-small"
+                        formControlName="name"
+                      />
+                    </div>
+                    <div class="ms-2">
+                      <i
+                        class="bi bi-check-circle cursor-pointer"
+                        (click)="manageField('update', fieldForm)"
+                      ></i>
+                    </div>
+                  </span>
+                </h5>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <hr />
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <!-- Text & Config -->
+    <form [formGroup]="textAndConfigForm" (submit)="textAndConfigFormSubmit()">
+      <div class="row">
+        <div class="col-12 col-sm-12">
+          <label for="text" class="form-label fw-bold">{{
+            labels.TextAndConfig
+          }}</label>
+          <ckeditor [config]="editorConfig" formControlName="text"></ckeditor>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <hr />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-sm-12">
+          <button type="submit" class="btn btn-primary btn-sm">
+            {{ labels.Submit }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

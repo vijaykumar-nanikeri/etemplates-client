@@ -1,0 +1,273 @@
+<div class="row mb-3">
+  <div class="col-12 col-md-8 col-lg-6 mb-3 mb-md-0">
+    <input
+      class="form-control input-search ps-5 bg-transparent border-0 border-bottom"
+      type="text"
+      [placeholder]="labels.SearchPlaceholder"
+      [(ngModel)]="searchModel"
+      (ngModelChange)="onSearchModelChange($event)"
+    />
+  </div>
+  <div class="col-12 col-md-4 col-lg-6 d-flex justify-content-end">
+    <button
+      type="button"
+      class="btn lh-1 p-0"
+      (click)="openAddUserModal(addUserModalTemplate)"
+    >
+      <i class="bi bi-plus-circle fs-3 text-muted"></i>
+    </button>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="table-responsive">
+      <table class="table">
+        <thead class="table-primary border-bottom-0">
+          <tr>
+            <th
+              class="border-bottom-0"
+              *ngFor="let usersTh of usersThead; let i = index"
+              [ngClass]="{
+                'text-end': [0].includes(i),
+                'text-center': [usersThead.length - 1].includes(i)
+              }"
+            >
+              {{ usersTh.name }}
+            </th>
+          </tr>
+        </thead>
+        <tbody *ngIf="!users.length">
+          <tr>
+            <td class="text-center fw-bold" [attr.colspan]="usersThead.length">
+              {{ homeLabels.NoRecordsFound }}
+            </td>
+          </tr>
+        </tbody>
+        <tbody class="border-top-0" *ngIf="users.length > 0">
+          <tr
+            *ngFor="let user of users; let i = index"
+            [ngStyle]="{
+              'border-left': '15px solid',
+              'border-right': '15px solid',
+              'border-left-color': user.block ? '#ddd' : '#54b62d50',
+              'border-right-color': user.block ? '#ddd' : '#54b62d50'
+            }"
+          >
+            <th scope="row" class="text-end">{{ i + 1 }}</th>
+            <td>{{ user.name }}</td>
+            <td>{{ user.userCategory }}</td>
+            <td>{{ user.mobileNo }}</td>
+            <td>{{ user.createdBy }}</td>
+            <!-- <td>{{ user.createdOn | formatDate: "DMY" }}</td> -->
+            <td class="text-center">
+              <button
+                type="button"
+                class="btn btn-link p-0"
+                (click)="openEditUserModal(editUserModalTemplate, user)"
+              >
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button
+                type="button"
+                class="btn btn-link p-0 ms-2"
+                *ngIf="!user.block"
+                (click)="openBlockUserModal(user)"
+              >
+                <i class="bi bi-slash-circle text-warning"></i>
+              </button>
+              <button
+                type="button"
+                class="btn btn-link p-0 ms-2"
+                *ngIf="user.block"
+                (click)="openUnblockUserModal(user)"
+              >
+                <i class="bi bi-check-circle text-success"></i>
+              </button>
+              <button
+                type="button"
+                class="btn btn-link p-0 ms-2"
+                (click)="openResetPasswordModal(user)"
+              >
+                <i class="bi bi-unlock text-primary"></i>
+              </button>
+              <button
+                type="button"
+                class="btn btn-link p-0 ms-2"
+                (click)="openDeleteUserModal(user)"
+              >
+                <i class="bi bi-trash text-danger"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<ng-template #addUserModalTemplate>
+  <div class="modal-header px-5 pt-5 border-bottom-0">
+    <div class="modal-title fs-6">{{ addUserModalLabels.Title }}</div>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="closeAddUserModal()"
+    ></button>
+  </div>
+  <div class="modal-body px-5">
+    <ng-container [formGroup]="addUserForm">
+      <div class="mb-3">
+        <label for="userCategory" class="form-label fw-bold">
+          {{ addUserModalLabels.UserCategory }}
+          <span class="text-danger">*</span>
+        </label>
+        <select
+          class="form-select"
+          id="userCategory"
+          formControlName="userCategoryId"
+        >
+          <option [value]="''">
+            {{ addUserModalLabels.UserCategoryPlaceholder }}
+          </option>
+          <option
+            [value]="userCategory.id"
+            *ngFor="let userCategory of userCategories"
+          >
+            {{ userCategory.name }}
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="name" class="form-label fw-bold">
+          {{ addUserModalLabels.Name }}
+          <span class="text-danger">*</span>
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          [placeholder]="addUserModalLabels.NamePlaceholder"
+          formControlName="name"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="mobileNo" class="form-label fw-bold">
+          {{ addUserModalLabels.MobileNo }}
+          <span class="text-danger">*</span>
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="mobileNo"
+          [placeholder]="addUserModalLabels.MobileNoPlaceholder"
+          formControlName="mobileNo"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="mobileNo" class="form-label fw-bold mb-0">
+          {{ addUserModalLabels.Password }}
+        </label>
+        <div class="form-control-plaintext">
+          <code class="text-body">{{ addUserModalLabels.PasswordValue }}</code>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <div class="modal-footer px-5 pb-5 border-top-0">
+    <button
+      type="button"
+      class="btn btn-link btn-sm text-reset text-uppercase text-decoration-none"
+      (click)="cancelAddUserModal()"
+    >
+      {{ addUserModalLabels.Cancel }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary btn-sm text-uppercase"
+      (click)="addUser()"
+      [disabled]="!addUserForm.valid"
+    >
+      {{ addUserModalLabels.Add }}
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #editUserModalTemplate>
+  <div class="modal-header px-5 pt-5 border-bottom-0">
+    <div class="modal-title fs-6">{{ editUserModalLabels.Title }}</div>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="closeEditUserModal()"
+    ></button>
+  </div>
+  <div class="modal-body px-5">
+    <ng-container [formGroup]="editUserForm">
+      <div class="mb-3">
+        <label for="userCategory" class="form-label fw-bold">
+          {{ editUserModalLabels.UserCategory }}
+          <span class="text-danger">*</span>
+        </label>
+        <select
+          class="form-select"
+          id="userCategory"
+          formControlName="userCategoryId"
+        >
+          <option [value]="''">
+            {{ editUserModalLabels.UserCategoryPlaceholder }}
+          </option>
+          <option
+            [value]="userCategory.id"
+            *ngFor="let userCategory of userCategories"
+          >
+            {{ userCategory.name }}
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="name" class="form-label fw-bold">
+          {{ editUserModalLabels.Name }}
+          <span class="text-danger">*</span>
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          [placeholder]="editUserModalLabels.NamePlaceholder"
+          formControlName="name"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="mobileNo" class="form-label fw-bold">
+          {{ editUserModalLabels.MobileNo }}
+          <span class="text-danger">*</span>
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="mobileNo"
+          [placeholder]="editUserModalLabels.MobileNoPlaceholder"
+          formControlName="mobileNo"
+        />
+      </div>
+    </ng-container>
+  </div>
+  <div class="modal-footer px-5 pb-5 border-top-0">
+    <button
+      type="button"
+      class="btn btn-link btn-sm text-reset text-uppercase text-decoration-none"
+      (click)="cancelEditUserModal()"
+    >
+      {{ editUserModalLabels.Cancel }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary btn-sm text-uppercase"
+      (click)="editUser()"
+      [disabled]="!editUserForm.valid"
+    >
+      {{ editUserModalLabels.Update }}
+    </button>
+  </div>
+</ng-template>

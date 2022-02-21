@@ -1,0 +1,152 @@
+<div class="row">
+  <div class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 mb-3">
+    <select
+      class="form-select"
+      [(ngModel)]="categoryModel"
+      (ngModelChange)="onCategoryModelChange($event)"
+    >
+      <option [value]="0">{{ labels.CategoryPlaceholder }}</option>
+      <option [value]="category.id" *ngFor="let category of categories">
+        {{ category.name }}
+      </option>
+    </select>
+  </div>
+  <div class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 mb-3">
+    <select
+      class="form-select"
+      [(ngModel)]="subcategoryModel"
+      (ngModelChange)="onSubcategoryModelChange($event)"
+    >
+      <option [value]="0">{{ labels.SubcategoryPlaceholder }}</option>
+      <option
+        [value]="subcategory.id"
+        *ngFor="let subcategory of subcategories"
+      >
+        {{ subcategory.name }}
+      </option>
+    </select>
+  </div>
+  <div class="col-12 col-sm-12 col-md-5 col-lg-4 col-xl-3 mb-3">
+    <select
+      class="form-select"
+      [(ngModel)]="templateModel"
+      (ngModelChange)="onTemplateModelChange($event)"
+    >
+      <option [value]="0">{{ labels.TemplatePlaceholder }}</option>
+      <option [value]="template.id" *ngFor="let template of templates">
+        {{ template.name }}
+      </option>
+    </select>
+  </div>
+  <div
+    class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-3 mb-3 d-grid d-sm-inline-block"
+  >
+    <button
+      type="button"
+      class="btn btn-primary btn-sm text-uppercase"
+      (click)="getFields()"
+      [disabled]="!(categoryModel && subcategoryModel && templateModel)"
+    >
+      {{ labels.Get }}
+    </button>
+  </div>
+</div>
+
+<ng-container *ngIf="templateModel && isGetClicked">
+  <div class="row">
+    <div class="col-12">
+      <hr />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <form [formGroup]="fieldsForm">
+        <div class="row" *ngIf="fields.controls.length > 0">
+          <div class="col-12 col-sm-12 d-flex flex-wrap">
+            <ng-container formArrayName="fields">
+              <ng-container
+                *ngFor="let fieldForm of fields.controls; let i = index"
+              >
+                <ng-container [formGroupName]="i">
+                  <div class="input-group w-auto m-2 mt-0 ms-0">
+                    <span class="input-group-text fw-bold">{{
+                      fieldForm.value.name
+                    }}</span>
+                    <input
+                      type="text"
+                      class="form-control w-auto flex-grow-0 flex-shrink-0"
+                      [placeholder]="labels.FieldPlaceholder"
+                      formControlName="value"
+                    />
+                  </div>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <hr />
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-12 col-sm-12">
+      <button type="button" class="btn btn-primary btn-sm" (click)="getText()">
+        {{ labels.Preview }}
+      </button>
+    </div>
+  </div>
+
+  <ng-container *ngIf="isPreviewClicked && processedText">
+    <div class="row">
+      <div class="col-12">
+        <hr />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 px-5">
+        <!-- Preview -->
+        <div class="row mb-3">
+          <div
+            class="col-12 col-sm-12 d-flex justify-content-between align-items-center m-auto a4"
+          >
+            <label class="form-label fw-bold">Preview</label>
+            <div class="btn-group">
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="download('doc')"
+              >
+                <i class="bi bi-file-earmark-word-fill"></i>
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="download('pdf')"
+              >
+                <i class="bi bi-file-earmark-pdf-fill"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-12 col-sm-12 table-responsive">
+            <div
+              id="preview"
+              class="m-auto bg-white p-1-inch a4"
+              [innerHtml]="processedText | safeHtml"
+              contenteditable="true"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>

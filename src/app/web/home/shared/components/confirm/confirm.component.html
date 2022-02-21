@@ -1,0 +1,22 @@
+<div class="modal-header justify-content-center border-bottom-0">
+  <div class="modal-title fs-6" [innerHtml]="title"></div>
+</div>
+<div class="modal-body text-center" [innerHtml]="text"></div>
+<div class="modal-footer justify-content-center border-top-0">
+  <button
+    type="button"
+    class="btn btn-sm text-reset text-uppercase text-decoration-none"
+    [ngClass]="cancelButtonClass"
+    (click)="cancel()"
+  >
+    {{ cancelButton }}
+  </button>
+  <button
+    type="button"
+    class="btn btn-sm text-uppercase"
+    [ngClass]="confirmButtonClass"
+    (click)="confirm()"
+  >
+    {{ confirmButton }}
+  </button>
+</div>

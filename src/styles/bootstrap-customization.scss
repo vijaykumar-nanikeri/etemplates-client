@@ -1,0 +1,42 @@
+@use "sass:map";
+
+@import "functions";
+@import "variables";
+@import "mixins";
+@import "tables";
+
+$font-size-base: 0.875rem;
+
+// form-control font-size
+$input-btn-font-size: $font-size-base;
+$input-font-size: $input-btn-font-size;
+$form-select-font-size: $input-font-size;
+
+// Theme
+$body-color: #041519;
+
+$min-contrast-ratio: 3.5;
+$primary: #27408b;
+$danger: #da292e;
+$theme-colors-update: (
+  primary: $primary,
+  danger: $danger,
+);
+$theme-colors: map-merge($theme-colors, $theme-colors-update);
+
+// Button link
+$btn-link-color: $primary;
+$link-color: $primary;
+$link-decoration: none;
+$link-shade-percentage: 20%;
+$link-hover-color: shift-color($link-color, $link-shade-percentage);
+$btn-link-hover-color: $link-hover-color;
+
+// Table
+$table-variants-update: (
+  primary: $primary,
+);
+$table-variants: map-merge($table-variants, $table-variants-update);
+$table-striped-bg: #e9f0f0;
+
+$text-muted: #546b70;

@@ -1,0 +1,50 @@
+<div class="container-fluid py-4 pt-sm-0">
+  <div
+    class="row d-none d-sm-flex position-sticky top-0 pt-4 bg-light main-header"
+  >
+    <div class="col">
+      <div class="d-flex flex-row-reverse">
+        <div class="p-2 ms-2">
+          <div class="btn-group">
+            <i
+              class="bi bi-person-circle fs-4 cursor-pointer text-secondary"
+              data-bs-toggle="dropdown"
+              data-bs-display="static"
+            >
+            </i>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <button
+                  class="dropdown-item"
+                  type="button"
+                  (click)="profileDetails()"
+                >
+                  {{ labels.ProfileDetails }}
+                </button>
+              </li>
+              <li>
+                <button
+                  class="dropdown-item"
+                  type="button"
+                  (click)="changePassword()"
+                >
+                  {{ labels.ChangePassword }}
+                </button>
+              </li>
+              <li>
+                <button class="dropdown-item" type="button" (click)="logout()">
+                  {{ labels.Logout }}
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col p-3">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

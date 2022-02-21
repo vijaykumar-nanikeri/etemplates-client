@@ -1,0 +1,61 @@
+<nav
+  class="navbar navbar-dark navbar-expand-sm justify-content-around justify-content-sm-start h-100 px-sm-0 py-0 fixed-start shadow-lg"
+>
+  <a class="navbar-brand w-50 py-0" href="#">
+    <div class="display-6 text-light app-title-font-family pa-logo">
+      {{ this.appDetails?.name }}
+    </div>
+  </a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#appMenus"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div
+    class="collapse navbar-collapse py-3 pe-2 ps-3 ps-md-4 overflow-auto"
+    id="appMenus"
+  >
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0 fw-bold">
+      <li
+        *ngFor="let menu of menus; let i = index"
+        class="nav-item d-flex mb-4 py-1 ps-2 {{ menu.classNames }}"
+        [ngClass]="{ active: menu.basePath && url.includes(menu.basePath) }"
+      >
+        <a
+          class="nav-link d-block d-sm-none w-75 ms-2 p-0 text-white cursor-pointer"
+          (click)="navigate(menu)"
+          data-bs-toggle="collapse"
+          data-bs-target="#appMenus"
+        >
+          {{ menu.name }}
+        </a>
+        <a
+          class="nav-link d-none d-sm-block w-75 ms-2 p-0 text-white cursor-pointer"
+          (click)="navigate(menu)"
+        >
+          {{ menu.name }}
+        </a>
+      </li>
+    </ul>
+    <ul
+      class="navbar-nav d-block d-sm-none me-auto mb-2 mb-lg-0 pt-4 border-top fw-bold"
+    >
+      <li
+        *ngFor="let userMenu of userMenus; let i = index"
+        class="nav-item d-flex mb-4 py-1 ps-2 {{ userMenu.classNames }}"
+      >
+        <a
+          class="nav-link w-75 ms-2 p-0 text-white cursor-pointer"
+          (click)="openUserMenu(userMenu)"
+          data-bs-toggle="collapse"
+          data-bs-target="#appMenus"
+        >
+          {{ userMenu.name }}
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>

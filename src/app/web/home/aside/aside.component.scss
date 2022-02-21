@@ -1,0 +1,115 @@
+@import "functions";
+@import "variables";
+@import "mixins";
+
+.navbar.fixed-start {
+  background: transparent linear-gradient(163deg, #162252 0%, #1b3f8b 88%, #4d6fac 100%) 0% 0% no-repeat padding-box;
+  z-index: 1;
+}
+
+.navbar.fixed-start .navbar-brand {
+  height: 5rem;
+}
+
+.navbar.fixed-start .navbar-brand .pa-logo {
+  margin-top: 10%;
+  margin-left: 5%;
+}
+
+$menus: categories, templates, draft-template, user-templates, users, profile-details, change-password, logout;
+
+.nav-link-before {
+  content: "";
+  background-repeat: no-repeat;
+  background-size: 1.25rem 1.25rem;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.navbar .navbar-collapse .navbar-nav .nav-item {
+  &.menu {
+    @each $menu in $menus {
+      &-#{$menu}::before {
+        @extend .nav-link-before;
+        background-image: url("../../../../assets/images/menu-icon-#{$menu}.svg");
+      }
+    }
+  }
+
+  &.active {
+    background-color: #27408b;
+  }
+
+  &:not(.active):hover {
+    background-color: #27408b80;
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  .navbar {
+    position: absolute;
+    width: 100%;
+    height: auto !important;
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  .navbar.fixed-start {
+    position: absolute;
+  }
+
+  .navbar.fixed-start .navbar-brand {
+    width: 100% !important;
+  }
+
+  .navbar.fixed-start .navbar-brand .pa-logo {
+    margin-left: 10%;
+  }
+}
+
+@include media-breakpoint-between(sm, md) {
+  .navbar.fixed-start {
+    width: calc(100% / 3);
+  }
+}
+
+@include media-breakpoint-between(md, lg) {
+  .navbar.fixed-start {
+    width: calc(100% / 4);
+  }
+}
+
+@include media-breakpoint-between(lg, xl) {
+  .navbar.fixed-start {
+    width: calc(100% / 4.8);
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .navbar.fixed-start {
+    width: calc(100% / 6);
+  }
+}
+
+// Library defined start >>
+@include media-breakpoint-up(sm) {
+  .navbar.fixed-start {
+    bottom: 0;
+    right: auto;
+    flex-flow: column nowrap;
+    align-items: flex-start;
+  }
+  .navbar.fixed-start .navbar-collapse {
+    flex-grow: 0;
+    flex-direction: column;
+    width: 100%;
+  }
+  .navbar.fixed-start .navbar-collapse .navbar-nav {
+    flex-direction: column;
+    width: 100%;
+  }
+  .navbar.fixed-start .navbar-collapse .navbar-nav .nav-item {
+    width: 100%;
+  }
+}
+// << Library defined end

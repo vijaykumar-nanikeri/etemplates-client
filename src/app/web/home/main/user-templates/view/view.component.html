@@ -1,0 +1,50 @@
+<div class="row mb-4">
+  <div class="col">
+    <h5
+      class="page-title mb-0 ps-4"
+      [routerLink]="['/home/user-templates/view-all']"
+    >
+      {{ labels.View }}
+      <span class="fw-bold" *ngIf="userTemplateUuid">{{
+        userTemplateUuid
+      }}</span>
+    </h5>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <form [formGroup]="textForm">
+      <div class="row mb-3">
+        <div class="col-12 col-sm-12 d-flex justify-content-end">
+          <div class="btn-group">
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              (click)="download('doc')"
+            >
+              <i class="bi bi-file-earmark-word-fill"></i>
+            </button>
+            <!-- <button
+              type="button"
+              class="btn btn-outline-secondary"
+              (click)="download('pdf')"
+            >
+              <i class="bi bi-file-earmark-pdf-fill"></i>
+            </button> -->
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-sm-12">
+          <ckeditor [config]="editorConfig" formControlName="text"></ckeditor>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <hr />
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
