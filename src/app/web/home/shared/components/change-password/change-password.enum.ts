@@ -12,8 +12,7 @@ export enum PASSWORD_FORM_CONTROL_LABELS {
     Characters Allowed:
     Case-insensitive,
     Numbers,
-    Special (
-      <code>!</code>,
+    Special (<code>!</code>,
       <code>#</code>,
       <code>$</code>,
       <code>+</code>,
@@ -22,8 +21,7 @@ export enum PASSWORD_FORM_CONTROL_LABELS {
       <code>^</code>,
       <code>_</code>,
       <code>~</code>
-      only
-    )`,
+      only)`,
   PasswordsMismatchValidationFeedback = 'Passwords do not match.',
 }
 
