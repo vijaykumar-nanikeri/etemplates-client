@@ -22,8 +22,8 @@ import {
 } from './view-all.enum';
 
 import { User } from 'src/app/web/home/shared/services/auth/auth.model';
-import { Category } from '../../categories/view-all/view-all.model';
-import { Subcategory } from '../../categories/subcategories/subcategories.model';
+import { Category } from 'src/app/web/home/main/categories/view-all/view-all.model';
+import { Subcategory } from 'src/app/web/home/main/categories/view/view.model';
 import { TemplatesTh, TemplatesThead, Template } from './view-all.model';
 
 @Component({
@@ -153,6 +153,7 @@ export class ViewAllComponent implements OnInit {
       if (this.searchModel) {
         const requestJson = {
           searchText: this.searchModel,
+          userId: this.userDetails?.id,
         };
 
         observable = this.httpService.post(
@@ -160,8 +161,13 @@ export class ViewAllComponent implements OnInit {
           requestJson
         );
       } else {
-        observable = this.httpService.get(
-          `${URLS.Subcategories}/${this.subcategoryModel}/${URLS.Templates}`
+        const requestJson = {
+          userId: this.userDetails?.id,
+        };
+
+        observable = this.httpService.post(
+          `${URLS.Subcategories}/${this.subcategoryModel}/${URLS.Templates}`,
+          requestJson
         );
       }
 

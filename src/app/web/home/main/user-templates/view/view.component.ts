@@ -24,6 +24,7 @@ export class ViewComponent implements OnInit {
 
   userTemplateId = 0;
   userTemplateUuid = '';
+  filename = '';
 
   textForm!: FormGroup;
 
@@ -64,6 +65,7 @@ export class ViewComponent implements OnInit {
       .subscribe(
         (data: any) => {
           this.userTemplateUuid = data?.data[0]?.uuid;
+          this.filename = data?.data[0]?.filename;
           this.textForm.get('text')?.setValue(data?.data[0]?.text || '');
         },
         (error: any) => {

@@ -5,7 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { CategoriesComponent } from './categories.component';
 
 import { ViewAllComponent } from './view-all/view-all.component';
-import { SubcategoriesComponent } from './subcategories/subcategories.component';
+import { ViewComponent } from './view/view.component';
 
 const categoriesRoutes: Routes = [
   {
@@ -18,7 +18,7 @@ const categoriesRoutes: Routes = [
       },
       {
         path: ':id',
-        component: SubcategoriesComponent,
+        component: ViewComponent,
       },
     ],
   },

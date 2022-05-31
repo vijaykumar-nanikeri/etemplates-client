@@ -1,0 +1,168 @@
+<div class="row mb-3">
+  <div class="col-12 col-md-8 col-lg-6 mb-3 mb-md-0">
+    <input
+      class="form-control input-search ps-5 bg-transparent border-0 border-bottom"
+      type="text"
+      [placeholder]="labels.SearchPlaceholder"
+      [(ngModel)]="searchModel"
+      (ngModelChange)="onSearchModelChange($event)"
+    />
+  </div>
+  <div class="col-12 col-md-4 col-lg-6 d-flex justify-content-end">
+    <button
+      type="button"
+      class="btn lh-1 p-0"
+      (click)="openAddFieldNameModal(addFieldNameModalTemplate)"
+    >
+      <i class="bi bi-plus-circle fs-3 text-muted"></i>
+    </button>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="table-responsive">
+      <table class="table">
+        <thead class="table-primary">
+          <tr>
+            <th
+              *ngFor="let fieldNamesTh of fieldNamesThead; let i = index"
+              [ngClass]="{
+                'text-end': [0].includes(i),
+                'text-center': [fieldNamesThead.length - 1].includes(i)
+              }"
+            >
+              {{ fieldNamesTh.name }}
+            </th>
+          </tr>
+        </thead>
+        <tbody *ngIf="!fieldNames.length">
+          <tr>
+            <td
+              class="text-center fw-bold"
+              [attr.colspan]="fieldNamesThead.length"
+            >
+              {{ homeLabels.NoRecordsFound }}
+            </td>
+          </tr>
+        </tbody>
+        <tbody *ngIf="fieldNames.length > 0">
+          <tr *ngFor="let fieldName of fieldNames; let i = index">
+            <th scope="row" class="text-end">{{ i + 1 }}</th>
+            <td>{{ fieldName.name }}</td>
+            <td>{{ fieldName.createdBy }}</td>
+            <td>{{ fieldName.createdOn | formatDate: "DMY" }}</td>
+            <td class="text-center">
+              <button
+                type="button"
+                class="btn btn-link p-0"
+                (click)="
+                  openEditFieldNameModal(editFieldNameModalTemplate, fieldName)
+                "
+              >
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button
+                type="button"
+                class="btn btn-link p-0 ms-2"
+                (click)="openDeleteFieldNameModal(fieldName)"
+              >
+                <i class="bi bi-trash text-danger"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<ng-template #addFieldNameModalTemplate>
+  <div class="modal-header px-5 pt-5 border-bottom-0">
+    <div class="modal-title fs-6">{{ addFieldNameModalLabels.Title }}</div>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="closeAddFieldNameModal()"
+    ></button>
+  </div>
+  <div class="modal-body px-5">
+    <ng-container [formGroup]="addFieldNameForm">
+      <div class="mb-3">
+        <label for="fieldNameName" class="form-label fw-bold">
+          {{ addFieldNameModalLabels.FieldNameName }}
+          <span class="text-danger">*</span>
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="fieldNameName"
+          [placeholder]="addFieldNameModalLabels.FieldNameNamePlaceholder"
+          formControlName="fieldNameName"
+        />
+      </div>
+    </ng-container>
+  </div>
+  <div class="modal-footer px-5 pb-5 border-top-0">
+    <button
+      type="button"
+      class="btn btn-link btn-sm text-reset text-uppercase text-decoration-none"
+      (click)="cancelAddFieldNameModal()"
+    >
+      {{ addFieldNameModalLabels.Cancel }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary btn-sm text-uppercase"
+      (click)="addFieldName()"
+      [disabled]="!addFieldNameForm.valid"
+    >
+      {{ addFieldNameModalLabels.Add }}
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #editFieldNameModalTemplate>
+  <div class="modal-header px-5 pt-5 border-bottom-0">
+    <div class="modal-title fs-6">{{ editFieldNameModalLabels.Title }}</div>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="closeEditFieldNameModal()"
+    ></button>
+  </div>
+  <div class="modal-body px-5">
+    <ng-container [formGroup]="editFieldNameForm">
+      <div class="mb-3">
+        <label for="fieldNameName" class="form-label fw-bold">
+          {{ editFieldNameModalLabels.FieldNameName }}
+          <span class="text-danger">*</span>
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="fieldNameName"
+          [placeholder]="editFieldNameModalLabels.FieldNameNamePlaceholder"
+          formControlName="fieldNameName"
+        />
+      </div>
+    </ng-container>
+  </div>
+  <div class="modal-footer px-5 pb-5 border-top-0">
+    <button
+      type="button"
+      class="btn btn-link btn-sm text-reset text-uppercase text-decoration-none"
+      (click)="cancelEditFieldNameModal()"
+    >
+      {{ editFieldNameModalLabels.Cancel }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary btn-sm text-uppercase"
+      (click)="editFieldName()"
+      [disabled]="!editFieldNameForm.valid"
+    >
+      {{ editFieldNameModalLabels.Update }}
+    </button>
+  </div>
+</ng-template>

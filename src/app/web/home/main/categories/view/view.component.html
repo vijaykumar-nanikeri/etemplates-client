@@ -39,7 +39,7 @@
               *ngFor="let subcategoriesTh of subcategoriesThead; let i = index"
               [ngClass]="{
                 'text-end': [0].includes(i),
-                'text-center': [2, subcategoriesThead.length - 1].includes(i)
+                'text-center': [2, 3, subcategoriesThead.length - 1].includes(i)
               }"
             >
               {{ subcategoriesTh.name }}
@@ -60,6 +60,7 @@
           <tr *ngFor="let subcategory of subcategories; let i = index">
             <th scope="row" class="text-end">{{ i + 1 }}</th>
             <td>{{ subcategory.name }}</td>
+            <td class="text-center">{{ subcategory.types }}</td>
             <td class="text-center">
               <ng-container *ngIf="!subcategory.templates">
                 {{ subcategory.templates }}

@@ -14,7 +14,7 @@ import { HotToastService } from '@ngneat/hot-toast';
 
 import { environment } from 'src/environments/environment';
 
-import { AuthService } from '../../services/auth/auth.service';
+import { AuthService } from 'src/app/web/home/shared/services/auth/auth.service';
 import { URLS } from 'src/app/web/public/shared/enums/urls';
 
 @Injectable()

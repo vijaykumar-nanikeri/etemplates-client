@@ -13,6 +13,10 @@ export const SubcategoriesThead: Array<SubcategoriesTh> = [
     name: 'Subcategory',
   },
   {
+    code: 'types',
+    name: 'Types',
+  },
+  {
     code: 'templates',
     name: 'Templates',
   },
@@ -33,6 +37,7 @@ export const SubcategoriesThead: Array<SubcategoriesTh> = [
 export interface Subcategory {
   id: number;
   name: string;
+  types: number;
   templates: number;
   createdBy: string;
   createdOn: string;

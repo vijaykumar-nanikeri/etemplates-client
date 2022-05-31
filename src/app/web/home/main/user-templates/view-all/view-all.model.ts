@@ -9,8 +9,12 @@ export const UserTemplatesThead: Array<UserTemplatesTh> = [
     name: 'S.No.',
   },
   {
-    code: 'userTemplate',
-    name: 'User Template',
+    code: 'uuid',
+    name: 'UUID',
+  },
+  {
+    code: 'filename',
+    name: 'File Name',
   },
   {
     code: 'createdOn',
@@ -25,5 +29,6 @@ export const UserTemplatesThead: Array<UserTemplatesTh> = [
 export interface UserTemplate {
   id: number;
   uuid: string;
+  filename: string;
   createdOn: string;
 }

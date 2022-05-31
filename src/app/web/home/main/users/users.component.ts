@@ -13,6 +13,8 @@ import { ConfirmComponent } from 'src/app/web/home/shared/components/confirm/con
 import { HttpService } from 'src/app/web/home/shared/services/http/http.service';
 import { AuthService } from 'src/app/web/home/shared/services/auth/auth.service';
 
+import { FormatDatePipe } from 'src/app/web/home/shared/pipes/format-date/format-date.pipe';
+
 import { HOME_LABELS } from 'src/app/web/home/shared/enums/home.enum';
 import { URLS } from 'src/app/web/home/shared/enums/urls.enum';
 import {
@@ -37,6 +39,7 @@ import {
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
+  providers: [FormatDatePipe],
 })
 export class UsersComponent implements OnInit {
   modalRef?: BsModalRef;
@@ -68,7 +71,8 @@ export class UsersComponent implements OnInit {
     private modalService: BsModalService,
     private toastService: HotToastService,
     private httpService: HttpService,
-    private authService: AuthService
+    private authService: AuthService,
+    private formatDatePipe: FormatDatePipe
   ) {
     this.searchModelChanged
       .pipe(debounceTime(500), distinctUntilChanged())
@@ -137,6 +141,10 @@ export class UsersComponent implements OnInit {
         }
       );
     }
+  }
+
+  formatDate(inputDate: string, format: string) {
+    return this.formatDatePipe.transform(inputDate, format);
   }
 
   getUserCategories() {
@@ -225,7 +233,9 @@ export class UsersComponent implements OnInit {
 
     this.httpService.put(`${URLS.Users}`, requestJson).subscribe(
       (data: any) => {
-        if (data?.message) {
+        if (data?.statusCode === HttpStatusCodes.CONFLICT) {
+          this.toastService.error(data?.message);
+        } else if (data?.message) {
           this.toastService.success(data?.message);
         }
         this.getUsers();

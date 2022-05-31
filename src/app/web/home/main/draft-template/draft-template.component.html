@@ -39,7 +39,7 @@
     </select>
   </div>
   <div
-    class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-3 mb-3 d-grid d-sm-inline-block"
+    class="col-12 col-sm-12 col-md-12 col-xl-3 mb-3 d-flex justify-content-between align-items-center"
   >
     <button
       type="button"
@@ -48,6 +48,16 @@
       [disabled]="!(categoryModel && subcategoryModel && templateModel)"
     >
       {{ labels.Get }}
+    </button>
+    <button
+      type="button"
+      class="btn lh-1 p-0"
+      (click)="openSubcategoryTypesModal(subcategoryTypesModalTemplate)"
+      [disabled]="
+        isSubcategoryTypesModalOpened || [0, '0'].includes(subcategoryModel)
+      "
+    >
+      <i class="bi bi-lightbulb fs-3 text-warning"></i>
     </button>
   </div>
 </div>
@@ -70,15 +80,31 @@
               >
                 <ng-container [formGroupName]="i">
                   <div class="input-group w-auto m-2 mt-0 ms-0">
-                    <span class="input-group-text fw-bold">{{
-                      fieldForm.value.name
-                    }}</span>
+                    <span class="input-group-text fw-bold"
+                      >{{ fieldForm.value.name }}
+                      <!-- [popover]="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." -->
+                      <i
+                        class="bi bi-info-circle ms-2 cursor-pointer text-info"
+                        *ngIf="fieldForm.value.notes"
+                        [title]="fieldForm.value.notes"
+                        triggers="focus"
+                      ></i>
+                    </span>
+                    <!-- [placeholder]="labels.FieldPlaceholder" -->
                     <input
                       type="text"
                       class="form-control w-auto flex-grow-0 flex-shrink-0"
-                      [placeholder]="labels.FieldPlaceholder"
+                      *ngIf="fieldForm.value.size === 0"
                       formControlName="value"
                     />
+                    <!-- [placeholder]="labels.FieldPlaceholder" -->
+                    <textarea
+                      class="form-control w-auto flex-grow-0 flex-shrink-0"
+                      rows="2"
+                      cols="50"
+                      *ngIf="fieldForm.value.size === 1"
+                      formControlName="value"
+                    ></textarea>
                   </div>
                 </ng-container>
               </ng-container>
@@ -118,6 +144,12 @@
             class="col-12 col-sm-12 d-flex justify-content-between align-items-center m-auto a4"
           >
             <label class="form-label fw-bold">Preview</label>
+            <input
+              type="text"
+              class="form-control w-50"
+              [(ngModel)]="downloadFilenameModel"
+              [placeholder]="labels.DownloadFilenamePlaceholder"
+            />
             <div class="btn-group">
               <button
                 type="button"
@@ -150,3 +182,49 @@
     </div>
   </ng-container>
 </ng-container>
+
+<ng-template #subcategoryTypesModalTemplate>
+  <div class="modal-header p-2 border-bottom-0">
+    <div class="modal-title fw-bold small">
+      {{
+        subcategoryModel
+          ? getSubcategoryName(subcategoryModel) + " - Types"
+          : subcategoryTypesModalLabels.Title
+      }}
+    </div>
+    <button
+      type="button"
+      class="btn-close small"
+      (click)="closeAddSubcategoryModal()"
+    ></button>
+  </div>
+  <div class="modal-body pt-0">
+    <select
+      class="form-select"
+      [(ngModel)]="subcategoryTypeModel"
+      (ngModelChange)="onSubcategoryTypeModelChange($event)"
+    >
+      <option [value]="0">{{ labels.SubcategoryTypePlaceholder }}</option>
+      <option
+        [value]="subcategoryType.id"
+        *ngFor="let subcategoryType of subcategoryTypes"
+      >
+        {{ subcategoryType.name }}
+      </option>
+    </select>
+    <hr />
+    <span class="fst-italic" *ngIf="!subcategoryTypeValues.length">{{
+      homeLabels.NoRecordsFound
+    }}</span>
+    <ul
+      class="list-group list-group-flush small"
+      *ngIf="subcategoryTypeValues.length > 0"
+    >
+      <li
+        class="list-group-item p-2"
+        *ngFor="let subcategoryTypeValue of subcategoryTypeValues"
+        [innerHtml]="subcategoryTypeValue.name"
+      ></li>
+    </ul>
+  </div>
+</ng-template>

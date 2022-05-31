@@ -20,6 +20,11 @@ const mainRoutes: Routes = [
           ),
       },
       {
+        path: 'library',
+        loadChildren: () =>
+          import('./library/library.module').then((m) => m.LibraryModule),
+      },
+      {
         path: 'templates',
         loadChildren: () =>
           import('./templates/templates.module').then((m) => m.TemplatesModule),

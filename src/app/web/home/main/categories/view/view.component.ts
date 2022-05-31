@@ -20,7 +20,7 @@ import {
   EDIT_SUBCATEGORY_MODAL_LABELS,
   DELETE_SUBCATEGORY_MODAL_LABELS,
   TEMPLATES_MODAL_LABELS,
-} from './subcategories.enum';
+} from './view.enum';
 
 import { User } from 'src/app/web/home/shared/services/auth/auth.model';
 import {
@@ -30,14 +30,14 @@ import {
   TemplatesTh,
   TemplatesThead,
   Template,
-} from './subcategories.model';
+} from './view.model';
 
 @Component({
-  selector: 'app-subcategories',
-  templateUrl: './subcategories.component.html',
-  styleUrls: ['./subcategories.component.scss'],
+  selector: 'app-view',
+  templateUrl: './view.component.html',
+  styleUrls: ['./view.component.scss'],
 })
-export class SubcategoriesComponent implements OnInit {
+export class ViewComponent implements OnInit {
   modalRef?: BsModalRef;
 
   categoryId = 0;
@@ -340,6 +340,7 @@ export class SubcategoriesComponent implements OnInit {
     if (this.templateSearchModel) {
       const requestJson = {
         searchText: this.templateSearchModel,
+        userId: this.userDetails?.id,
       };
 
       observable = this.httpService.post(
@@ -347,8 +348,13 @@ export class SubcategoriesComponent implements OnInit {
         requestJson
       );
     } else {
-      observable = this.httpService.get(
-        `${URLS.Subcategories}/${this.subcategoryId}/${URLS.Templates}`
+      const requestJson = {
+        userId: this.userDetails?.id,
+      };
+
+      observable = this.httpService.post(
+        `${URLS.Subcategories}/${this.subcategoryId}/${URLS.Templates}`,
+        requestJson
       );
     }
 

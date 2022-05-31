@@ -1,0 +1,31 @@
+<div class="row mb-4">
+  <div class="col">
+    <div class="d-flex justify-content-between flex-column flex-md-row">
+      <ul class="nav nav-pills nav-justified d-flex d-md-none">
+        <ng-container *ngTemplateOutlet="libraryNavPills"></ng-container>
+      </ul>
+      <ul class="nav nav-pills d-none d-md-flex">
+        <ng-container *ngTemplateOutlet="libraryNavPills"></ng-container>
+      </ul>
+      <ng-template #libraryNavPills>
+        <li
+          class="nav-item"
+          *ngFor="let libraryTab of libraryTabs; let i = index"
+        >
+          <a
+            class="nav-link shadow"
+            [class.active]="url.includes(libraryTab.basePath)"
+            [routerLink]="[libraryTab.basePath + libraryTab.link]"
+          >
+            {{ libraryTab.name }}
+          </a>
+        </li>
+      </ng-template>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <router-outlet></router-outlet>
+  </div>
+</div>

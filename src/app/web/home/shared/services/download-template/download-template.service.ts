@@ -35,9 +35,22 @@ export class DownloadTemplateService {
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       console.log(imgWidth, imgHeight, canvas.width, canvas.height);
 
+      let pageHeight = 295;
+      let imgHeightLeft = imgHeight;
+      let position = 0;
+
       const contentDataUrl = canvas.toDataURL('image/png');
       const pdf = new jspdf('portrait', 'mm', 'a4');
       pdf.addImage(contentDataUrl, 'PNG', 0, 0, imgWidth, imgHeight);
+
+      imgHeightLeft -= pageHeight;
+
+      while (imgHeightLeft >= 0) {
+        position = imgHeightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(contentDataUrl, 'PNG', 0, position, imgWidth, imgHeight);
+        imgHeightLeft -= pageHeight;
+      }
 
       const aliasFilename = 'document.pdf';
       pdf.save(`${filename}.pdf` || aliasFilename);

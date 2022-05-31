@@ -11,24 +11,66 @@
 </div>
 
 <div class="row">
-  <div class="col-12">
+  <div class="col-12 col-lg-4 col-md-6 col-xl-3 ms-3 mb-3 py-3 bg-white border">
     <form [formGroup]="addFieldForm" (submit)="addFieldFormSubmit()">
       <div class="row">
-        <div class="col-12 col-sm-8 col-md-5 col-lg-4 col-xl-3 mb-3">
+        <div class="col-12 mb-3">
           <label for="field" class="form-label fw-bold">{{
-            labels.Field
+            labels.FieldName
           }}</label>
           <input
             type="text"
             class="form-control form-control-sm"
             id="field"
-            [placeholder]="labels.FieldPlaceholder"
+            list="fields"
+            [placeholder]="labels.FieldNamePlaceholder"
             formControlName="name"
           />
+          <datalist id="fields">
+            <option
+              [value]="fieldName.name"
+              *ngFor="let fieldName of fieldNames"
+            ></option>
+          </datalist>
         </div>
-        <div
-          class="col-12 col-sm-4 col-md-3 col-xl-2 d-grid d-sm-flex align-items-sm-end mb-3"
-        >
+        <div class="col-12 mb-3">
+          <label for="notes" class="form-label fw-bold">{{
+            labels.FieldNotes
+          }}</label>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            id="notes"
+            [placeholder]="labels.FieldNotesPlaceholder"
+            formControlName="notes"
+          />
+        </div>
+        <div class="col-12 mb-2">
+          <label for="notes" class="form-label fw-bold">{{
+            labels.FieldSize
+          }}</label>
+          <div>
+            <div class="btn-group" role="group">
+              <ng-container *ngFor="let fieldSize of fieldSizes; let i = index">
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="size"
+                  [id]="fieldSize.code"
+                  [value]="fieldSize.value"
+                  formControlName="size"
+                  autocomplete="off"
+                />
+                <label
+                  class="btn btn-outline-secondary"
+                  [for]="fieldSize.code"
+                  >{{ fieldSize.name }}</label
+                >
+              </ng-container>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 d-grid d-sm-flex align-items-sm-end">
           <button
             type="submit"
             class="btn btn-primary btn-sm"
@@ -39,8 +81,10 @@
         </div>
       </div>
     </form>
+  </div>
+  <div class="col" *ngIf="fields.controls.length > 0">
     <form [formGroup]="fieldsForm">
-      <div class="row" *ngIf="fields.controls.length > 0">
+      <div class="row">
         <div class="col-12 col-sm-12 d-flex flex-wrap">
           <ng-container formArrayName="fields">
             <ng-container
@@ -61,6 +105,14 @@
                         (click)="manageField('edit', fieldForm)"
                       ></i>
                     </div>
+                    <!-- <div class="ms-2">
+                      <i
+                        class="bi bi-pencil-square cursor-pointer"
+                        (click)="
+                          openEditFieldModal(editFieldModalTemplate, fieldForm)
+                        "
+                      ></i>
+                    </div> -->
                     <div class="ms-2">
                       <i
                         class="bi bi-trash cursor-pointer"
@@ -135,3 +187,82 @@
     </form>
   </div>
 </div>
+
+<ng-template #editFieldModalTemplate>
+  <div class="modal-header px-5 pt-5 border-bottom-0">
+    <div class="modal-title fs-6">{{ editFieldModalLabels.Title }}</div>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="closeEditFieldModal()"
+    ></button>
+  </div>
+  <div class="modal-body px-5">
+    <ng-container [formGroup]="editFieldForm">
+      <div class="mb-3">
+        <label for="name" class="form-label fw-bold">
+          {{ editFieldModalLabels.FieldName }}
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          [placeholder]="editFieldModalLabels.FieldNamePlaceholder"
+          formControlName="name"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="notes" class="form-label fw-bold">
+          {{ editFieldModalLabels.FieldNotes }}
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="notes"
+          [placeholder]="editFieldModalLabels.FieldNotesPlaceholder"
+          formControlName="notes"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="notes" class="form-label fw-bold">{{
+          editFieldModalLabels.FieldSize
+        }}</label>
+        <div>
+          <div class="btn-group" role="group">
+            <ng-container *ngFor="let fieldSize of fieldSizes; let i = index">
+              <input
+                type="radio"
+                class="btn-check"
+                name="size"
+                [id]="fieldSize.code"
+                [value]="fieldSize.value"
+                formControlName="size"
+                autocomplete="off"
+              />
+              <label class="btn btn-outline-secondary" [for]="fieldSize.code">{{
+                fieldSize.name
+              }}</label>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <div class="modal-footer px-5 pb-5 border-top-0">
+    <button
+      type="button"
+      class="btn btn-link btn-sm text-reset text-uppercase text-decoration-none"
+      (click)="cancelEditFieldModal()"
+    >
+      {{ editFieldModalLabels.Cancel }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary btn-sm text-uppercase"
+      (click)="editField()"
+      [disabled]="!editFieldForm.valid"
+    >
+      {{ editFieldModalLabels.Update }}
+    </button>
+  </div>
+</ng-template>

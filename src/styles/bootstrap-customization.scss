@@ -4,6 +4,7 @@
 @import "variables";
 @import "mixins";
 @import "tables";
+@import "nav";
 
 $font-size-base: 0.875rem;
 
@@ -38,5 +39,10 @@ $table-variants-update: (
 );
 $table-variants: map-merge($table-variants, $table-variants-update);
 $table-striped-bg: #e9f0f0;
+
+$nav-link-color: $link-color;
+$nav-link-hover-color: $link-hover-color;
+$nav-pills-link-active-color: $white;
+$nav-pills-link-active-bg: $primary;
 
 $text-muted: #546b70;

@@ -24,10 +24,14 @@ export const UsersThead: Array<UsersTh> = [
     code: 'createdBy',
     name: 'Created by',
   },
-  // {
-  //   code: 'createdOn',
-  //   name: 'Created on',
-  // },
+  {
+    code: 'createdOn',
+    name: 'Created on',
+  },
+  {
+    code: 'templates',
+    name: 'Templates',
+  },
   {
     code: 'actions',
     name: 'Actions',
@@ -43,6 +47,7 @@ export interface User {
   block: number;
   createdBy: string;
   createdOn: string;
+  templates: number;
 }
 
 export interface UserCategory {

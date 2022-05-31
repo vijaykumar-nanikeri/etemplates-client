@@ -1,0 +1,184 @@
+<div class="row mb-3">
+  <div class="col-12 col-lg-11 d-flex align-items-center mb-3 mb-md-0">
+    <h5
+      class="page-title mb-0 ps-4"
+      [routerLink]="['/home/library/subcategory-types/view-all']"
+    >
+      {{ subcategoryTypeName }}
+    </h5>
+  </div>
+  <div class="col-12 col-lg-1 d-flex justify-content-end">
+    <button
+      type="button"
+      class="btn lh-1 p-0"
+      (click)="
+        openAddSubcategoryTypeValueModal(addSubcategoryTypeValueModalTemplate)
+      "
+    >
+      <i class="bi bi-plus-circle fs-3 text-muted"></i>
+    </button>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="table-responsive">
+      <table class="table align-baseline">
+        <thead class="table-primary">
+          <tr>
+            <th
+              *ngFor="
+                let subcategoryTypeValuesTh of subcategoryTypeValuesThead;
+                let i = index
+              "
+              [ngClass]="{
+                'text-end': [0].includes(i),
+                'text-center': [subcategoryTypeValuesThead.length - 1].includes(
+                  i
+                )
+              }"
+            >
+              {{ subcategoryTypeValuesTh.name }}
+            </th>
+          </tr>
+        </thead>
+        <tbody *ngIf="!subcategoryTypeValues.length">
+          <tr>
+            <td
+              class="text-center fw-bold"
+              [attr.colspan]="subcategoryTypeValuesThead.length"
+            >
+              {{ homeLabels.NoRecordsFound }}
+            </td>
+          </tr>
+        </tbody>
+        <tbody *ngIf="subcategoryTypeValues.length > 0">
+          <tr
+            *ngFor="
+              let subcategoryTypeValue of subcategoryTypeValues;
+              let i = index
+            "
+          >
+            <th scope="row" class="text-end">{{ i + 1 }}</th>
+            <td class="text-top" [innerHtml]="subcategoryTypeValue.name"></td>
+            <td>{{ subcategoryTypeValue.createdBy }}</td>
+            <td>{{ subcategoryTypeValue.createdOn | formatDate: "DMY" }}</td>
+            <td class="text-center">
+              <button
+                type="button"
+                class="btn btn-link p-0"
+                (click)="
+                  openEditSubcategoryTypeValueModal(
+                    editSubcategoryTypeValueModalTemplate,
+                    subcategoryTypeValue
+                  )
+                "
+              >
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button
+                type="button"
+                class="btn btn-link p-0 ms-2"
+                (click)="
+                  openDeleteSubcategoryTypeValueModal(subcategoryTypeValue, i + 1)
+                "
+              >
+                <i class="bi bi-trash text-danger"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<ng-template #addSubcategoryTypeValueModalTemplate>
+  <div class="modal-header px-5 pt-5 border-bottom-0">
+    <div class="modal-title fs-6">
+      {{ addSubcategoryTypeValueModalLabels.Title }}
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="closeAddSubcategoryTypeValueModal()"
+    ></button>
+  </div>
+  <div class="modal-body px-5">
+    <ng-container [formGroup]="addSubcategoryTypeValueForm">
+      <div class="mb-3">
+        <label for="addSubcategoryTypeValueName" class="form-label fw-bold">
+          {{ addSubcategoryTypeValueModalLabels.SubcategoryTypeValueName }}
+          <span class="text-danger">*</span>
+        </label>
+        <ckeditor
+          id="addSubcategoryTypeValueName"
+          [config]="addSubcategoryTypeValueEditorConfig"
+          formControlName="subcategoryTypeValueName"
+        ></ckeditor>
+      </div>
+    </ng-container>
+  </div>
+  <div class="modal-footer px-5 pb-5 border-top-0">
+    <button
+      type="button"
+      class="btn btn-link btn-sm text-reset text-uppercase text-decoration-none"
+      (click)="cancelAddSubcategoryTypeValueModal()"
+    >
+      {{ addSubcategoryTypeValueModalLabels.Cancel }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary btn-sm text-uppercase"
+      (click)="addSubcategoryTypeValue()"
+      [disabled]="!addSubcategoryTypeValueForm.valid"
+    >
+      {{ addSubcategoryTypeValueModalLabels.Add }}
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #editSubcategoryTypeValueModalTemplate>
+  <div class="modal-header px-5 pt-5 border-bottom-0">
+    <div class="modal-title fs-6">
+      {{ editSubcategoryTypeValueModalLabels.Title }}
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="closeEditSubcategoryTypeValueModal()"
+    ></button>
+  </div>
+  <div class="modal-body px-5">
+    <ng-container [formGroup]="editSubcategoryTypeValueForm">
+      <div class="mb-3">
+        <label for="editSubcategoryTypeValueName" class="form-label fw-bold">
+          {{ editSubcategoryTypeValueModalLabels.SubcategoryTypeValueName }}
+          <span class="text-danger">*</span>
+        </label>
+        <ckeditor
+          id="editSubcategoryTypeValueName"
+          [config]="editSubcategoryTypeValueEditorConfig"
+          formControlName="subcategoryTypeValueName"
+        ></ckeditor>
+      </div>
+    </ng-container>
+  </div>
+  <div class="modal-footer px-5 pb-5 border-top-0">
+    <button
+      type="button"
+      class="btn btn-link btn-sm text-reset text-uppercase text-decoration-none"
+      (click)="cancelEditSubcategoryTypeValueModal()"
+    >
+      {{ editSubcategoryTypeValueModalLabels.Cancel }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary btn-sm text-uppercase"
+      (click)="editSubcategoryTypeValue()"
+      [disabled]="!editSubcategoryTypeValueForm.valid"
+    >
+      {{ editSubcategoryTypeValueModalLabels.Update }}
+    </button>
+  </div>
+</ng-template>
